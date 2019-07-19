@@ -45,8 +45,6 @@ def help_message(message):
 def asking_message(message):
     bot.send_message(chat_id=message.chat.id, text = "You entered '"+message.text+"'")
 
-bot.polling(none_stop=True)
-
 class Helping:
     def __init__(self, lang, message):
         self.__lang = lang
@@ -257,3 +255,5 @@ class Helping:
         elif self.__lang == "rus":
             bot.send_message(chat_id=self.__message.chat.id, text = "Больше информации по японским электроскутерам "+
             "вы можете получить на отдельном нашем сайте http://electroskuter.by/")
+            
+bot.polling(none_stop=True)
