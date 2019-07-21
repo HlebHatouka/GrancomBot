@@ -98,9 +98,9 @@ class Helping:
                 raise ValueError()
             self.__get_command()
         except ValueError:
-            self.__error_occured()
+            self.__error_occurred()
         
-    def __error_occured(self):
+    def __error_occurred(self):
         if self.__lang == "eng":
             bot.send_message(chat_id=self.__message.chat.id, text = "Enter the number of question or /exit to leave!")
         if self.__lang == "bel":
