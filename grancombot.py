@@ -3,7 +3,7 @@ from telebot import types
 import sqlite3
 #import mysql.connector
 
-bot = telebot.TeleBot('token')
+bot = telebot.TeleBot('942160466:AAF2PUbUMAvlWpODUw9qdinDlG9NMChC09M')
 language = str()
 
 @bot.message_handler(commands=['start'])
