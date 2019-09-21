@@ -22,18 +22,18 @@ def table_adding(connection, adder):
     table_cursor.execute(adder)
 
 def set_bel_greeting():
-    greeting = 'Добра :-)\nУвядзіце каманду /help , каб даведацца больш, '+
-            'або проста задайце пытанне.'
+    greeting = '''Добра :-)\nУвядзіце каманду /help , каб даведацца больш, 
+    або проста задайце пытанне.'''
     return greeting
 
 def set_rus_greeting():
-    greeting = 'Хорошо :-)\nВведите команду /help , чтобы узнать больше, '+
-            'или просто задайте вопрос.'
+    greeting = '''Хорошо :-)\nВведите команду /help , чтобы узнать больше,
+            или просто задайте вопрос.'''
     return greeting
 
 def set_eng_greeting():
-    greeting = 'Good :-)\nEnter the command /help to get more information ' +
-            'or just ask me.'
+    greeting = '''Good :-)\nEnter the command /help to get more information
+            or just ask me.'''
     return greeting
 
 def set_bel_helping():
@@ -61,18 +61,18 @@ def set_eng_helping():
     return helping
 
 def set_bel_error():
-    error = "Увядзіце нумар пытання або /exit , каб выйсці "+
-        "і задаць сваё ўласнае пытанне!"
+    error = '''Увядзіце нумар пытання або /exit , каб выйсці
+        і задаць сваё ўласнае пытанне!'''
     return error
 
 def set_rus_error():
-    error = "Введите номер вопроса или /exit , чтобы выйти "+
-            "и задать свой собственный вопрос!"
+    error = '''Введите номер вопроса или /exit , чтобы выйти
+            и задать свой собственный вопрос!'''
     return error
 
 def set_eng_error():
-    error = "Enter the number of question or /exit to leave "+
-            "and ask your own question!"
+    error = '''Enter the number of question or /exit to leave
+            and ask your own question!'''
     return error
 
 def set_bel_questions():
