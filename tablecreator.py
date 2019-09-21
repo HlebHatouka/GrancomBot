@@ -21,6 +21,60 @@ def table_adding(connection, adder):
     table_cursor = connection.cursor()
     table_cursor.execute(adder)
 
+def set_bel_greeting():
+    greeting = 'Добра :-)\nУвядзіце каманду /help , каб даведацца больш, '+
+            'або проста задайце пытанне.'
+    return greeting
+
+def set_rus_greeting():
+    greeting = 'Хорошо :-)\nВведите команду /help , чтобы узнать больше, '+
+            'или просто задайте вопрос.'
+    return greeting
+
+def set_eng_greeting():
+    greeting = 'Good :-)\nEnter the command /help to get more information ' +
+            'or just ask me.'
+    return greeting
+
+def set_bel_helping():
+    helping = (
+        'Я дапамагу Вам знайсці адказы на некаторыя пытанні!\n'
+        'Увядзіце нумар пытання, што Вас цікавіць.\n\n' ,
+        'Увядзіце каманду /exit , каб пакінуць выбар і задаць ўласнае пытанне.'
+    )
+    return helping
+
+def set_rus_helping():
+    helping = (
+        'Я помогу Вам найти ответы на некоторые вопросы!\n'
+        'Введите номер интересующего Вас вопроса.\n\n' ,
+        'Введите команду /exit , чтобы оставить выбор и задать собственный вопрос.'
+    )
+    return helping
+
+def set_eng_helping():
+    helping = (
+        'I can help you to find the answers to some questions!\n'
+        'Enter the number of question that interests you.\n\n' ,
+        'Enter the command /exit to leave choice menu and ask your own question.'
+    )
+    return helping
+
+def set_bel_error():
+    error = "Увядзіце нумар пытання або /exit , каб выйсці "+
+        "і задаць сваё ўласнае пытанне!"
+    return error
+
+def set_rus_error():
+    error = "Введите номер вопроса или /exit , чтобы выйти "+
+            "и задать свой собственный вопрос!"
+    return error
+
+def set_eng_error():
+    error = "Enter the number of question or /exit to leave "+
+            "and ask your own question!"
+    return error
+
 def set_bel_questions():
     questions = (
         '1. Якія скутары ў вас можна набыць?',
@@ -161,6 +215,18 @@ if __name__ == "__main__":
     table_creation(table_connect, get_creator(bel_table_name))
     table_creation(table_connect, get_creator(rus_table_name))
     table_creation(table_connect, get_creator(eng_table_name))
+
+    bel_greeting = set_bel_greeting()
+    rus_greeting = set_rus_greeting()
+    eng_greeting = set_eng_greeting()
+
+    bel_helping = set_bel_helping()
+    rus_helping = set_rus_helping()
+    eng_helping = set_eng_helping()
+
+    bel_error = set_bel_error()
+    rus_error = set_rus_error()
+    eng_error = set_eng_error()
 
     bel_questions = set_bel_questions()
     rus_questions = set_rus_questions()
