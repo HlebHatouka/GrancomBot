@@ -1,9 +1,9 @@
 import telebot
 from telebot import types
 import sqlite3
-#import mysql.connector
 
-bot = telebot.TeleBot('')
+#set your bot token here
+bot = telebot.TeleBot('token')
 language = str()
 
 @bot.message_handler(commands=['start'])
@@ -51,18 +51,16 @@ class Helping:
     def __init__(self, lang, message):
         self.__lang = lang
         self.__message = message
-        self.__table = "questions.sqlite"
+        self.__question_table = "questions.sqlite"
+        self.__help_table = "help.sqlite"
 
     def help(self, message):
         self.__set_message(message)
-        connection = self.__create_connection(self.__table)
-        if self.__lang == "eng":
-            self.__eng_help(connection)
-        elif self.__lang == "bel":
-            self.__bel_help(connection)
-        elif self.__lang == "rus":
-            self.__rus_help(connection)
-        self.__dissable_connection(connection)
+        question_connection = self.__create_connection(self.__question_table)
+        help_connection = self.__create_connection(self.__help_table)
+        self.__get_help(question_connection, help_connection)
+        self.__dissable_connection(question_connection)
+        self.__dissable_connection(help_connection)
         self.__get_command()
 
     def __set_message(self, message):
@@ -78,16 +76,20 @@ class Helping:
     def __create_connection(self, path):
         return sqlite3.connect(path)
 
-    def __get_questions(self, connection, name):
+    def __get_from_question_table(self, what, name, number):
+        connection = self.__create_connection(self.__question_table)
         table_cursor = connection.cursor()
-        table_cursor.execute("SELECT question FROM {0}".format(name))
-        results = table_cursor.fetchall()
-        return results
+        table_cursor.execute("SELECT {0} FROM {1} WHERE id = {2}".format(what, name, number))
+        result = table_cursor.fetchall()
+        self.__dissable_connection(connection)
+        return result
 
-    def __get_answer(self, connection, name, number):
+    def __get_from_help_table(self, what, name):
+        connection = self.__create_connection(self.__help_table)
         table_cursor = connection.cursor()
-        table_cursor.execute("SELECT answer FROM {0} WHERE id = {1}".format(name, number))
+        table_cursor.execute("SELECT {0} FROM {1}".format(what, name))
         results = table_cursor.fetchall()
+        self.__dissable_connection(connection)
         return results
 
     def __dissable_connection(self, connection):
@@ -111,44 +113,25 @@ class Helping:
             self.__error_occurred()
 
     def __error_occurred(self):
-        if self.__lang == "eng":
-            bot.send_message(chat_id=self.__message.chat.id, text = "Enter the number of question or /exit to leave "+
-            "and ask your own question!")
-        if self.__lang == "bel":
-            bot.send_message(chat_id=self.__message.chat.id, text = "Увядзіце нумар пытання або /exit , каб выйсці "+
-            "і задаць сваё ўласнае пытанне!")
-        if self.__lang == "rus":
-            bot.send_message(chat_id=self.__message.chat.id, text = "Введите номер вопроса или /exit , чтобы выйти "+
-            "и задать свой собственный вопрос!")
+        error = self.__get_from_help_table("error", self.__lang)
+        bot.send_message(chat_id=self.__message.chat.id, text = error)
         self.__get_command()
 
-    def __eng_help(self, connection):
-        questions = self.__get_questions(connection, self.__lang)
-        bot.send_message(chat_id=self.__message.chat.id, text = 'I can help you to find the answers to some questions!\n'
-        'Enter the number of question that interests you.\n\n')
+    def __get_help(self, questions_connection, help_connection):
+        questions = []
+        helping = []
+        for i in range(7):
+            questions.append(self.__get_from_question_table("question", self.__lang, i+1))
+        for i in range(2):
+            helping.append(self.__get_from_help_table("helping", self.__lang))
+        bot.send_message(chat_id=self.__message.chat.id, text = helping[0])
         for question in questions:
             bot.send_message(chat_id=self.__message.chat.id, text = question)
-        bot.send_message(chat_id=self.__message.chat.id, text = 'Enter the command /exit to leave choice menu and ask your own question.')
-
-    def __bel_help(self, connection):
-        questions = self.__get_questions(connection, self.__lang)
-        bot.send_message(chat_id=self.__message.chat.id, text = 'Я дапамагу Вам знайсці адказы на некаторыя пытанні!\n'
-        'Увядзіце нумар пытання, што Вас цікавіць.\n\n')
-        for question in questions:
-            bot.send_message(chat_id=self.__message.chat.id, text = question)
-        bot.send_message(chat_id=self.__message.chat.id, text = 'Увядзіце каманду /exit , каб пакінуць выбар і задаць ўласнае пытанне.')
-
-    def __rus_help(self, connection):
-        questions = self.__get_questions(connection, self.__lang)
-        bot.send_message(chat_id=self.__message.chat.id, text = 'Я помогу Вам найти ответы на некоторые вопросы!\n'
-        'Введите номер интересующего Вас вопроса.\n\n')
-        for question in questions:
-            bot.send_message(chat_id=self.__message.chat.id, text = question)
-        bot.send_message(chat_id=self.__message.chat.id, text = 'Введите команду /exit , чтобы оставить выбор и задать собственный вопрос.')
+        bot.send_message(chat_id=self.__message.chat.id, text = helping[1]) 
 
     def __answer(self, number):
-        connection = self.__create_connection(self.__table)
-        answer = self.__get_answer(connection, self.__lang, number)
+        connection = self.__create_connection(self.__question_table)
+        answer = self.__get_from_question_table("answer", self.__lang, number)
         bot.send_message(chat_id=self.__message.chat.id, text = answer)
         self.__dissable_connection(connection)
 
