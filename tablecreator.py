@@ -1,10 +1,20 @@
 import sqlite3
 
-def get_creator(name):
-    creator = """CREATE TABLE {0}
-                     (id integer PRIMARY KEY,
+def get_questions_creator(name):
+    creator = """CREATE TABLE {0} 
+                    (id integer PRIMARY KEY,
                     question text,
                     answer text
+                    ); """.format(name)
+    return creator
+
+def get_help_creator(name):
+    creator = """CREATE TABLE {0}
+                    (
+                    lang text,
+                    greeting text,
+                    helping text,
+                    error text 
                     ); """.format(name)
     return creator
 
@@ -12,9 +22,16 @@ def table_creation(connection, creator):
     table_cursor = connection.cursor()
     table_cursor.execute(creator)
 
-def get_adder(name, id, question, answer):
-    adder = """INSERT INTO {0}
-            VALUES ( {1} , "{2}" , "{3}" );""".format(name, id, question, answer)
+def get_questions_adder(name, id, question, answer):
+    adder = """INSERT INTO {0} 
+            VALUES ( {1} , "{2}" , "{3}" );
+            """.format(name, id, question, answer)
+    return adder
+
+def get_help_adder(name, lang, greeting, helping, error):
+    adder = """INSERT INTO {0} 
+            VALUES ( "{1}", "{2}", "{3}", "{4}" );
+            """.format(name, lang, greeting, helping, error)
     return adder
 
 def table_adding(connection, adder):
@@ -212,9 +229,9 @@ if __name__ == "__main__":
 
     table_connect = sqlite3.connect(table)
 
-    table_creation(table_connect, get_creator(bel_table_name))
-    table_creation(table_connect, get_creator(rus_table_name))
-    table_creation(table_connect, get_creator(eng_table_name))
+    table_creation(table_connect, get_questions_creator(bel_table_name))
+    table_creation(table_connect, get_questions_creator(rus_table_name))
+    table_creation(table_connect, get_questions_creator(eng_table_name))
 
     bel_greeting = set_bel_greeting()
     rus_greeting = set_rus_greeting()
@@ -237,13 +254,13 @@ if __name__ == "__main__":
     eng_answers = set_eng_answers()
 
     for i in range(7):
-        adder = get_adder(bel_table_name, i+1, bel_questions[i], bel_answers[i])
+        adder = get_questions_adder(bel_table_name, i+1, bel_questions[i], bel_answers[i])
         table_adding(table_connect, adder)
     for i in range(7):
-        adder = get_adder(rus_table_name, i+1, rus_questions[i], rus_answers[i])
+        adder = get_questions_adder(rus_table_name, i+1, rus_questions[i], rus_answers[i])
         table_adding(table_connect, adder)
     for i in range(7):
-        adder = get_adder(eng_table_name, i+1, eng_questions[i], eng_answers[i])
+        adder = get_questions_adder(eng_table_name, i+1, eng_questions[i], eng_answers[i])
         table_adding(table_connect, adder)
 
     table_connect.commit()
