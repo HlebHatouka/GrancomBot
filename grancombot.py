@@ -3,7 +3,7 @@ from telebot import types
 import sqlite3
 
 #set your bot token here
-bot = telebot.TeleBot('token')
+bot = telebot.TeleBot('942160466:AAF2PUbUMAvlWpODUw9qdinDlG9NMChC09M')
 language = str()
 
 @bot.message_handler(commands=['start'])
@@ -124,10 +124,10 @@ class Helping:
             questions.append(self.__get_from_question_table("question", self.__lang, i+1))
         for i in range(2):
             helping.append(self.__get_from_help_table("helping", self.__lang))
-        bot.send_message(chat_id=self.__message.chat.id, text = helping[0])
+        bot.send_message(chat_id=self.__message.chat.id, text = str(helping[0])[5:-5])
         for question in questions:
             bot.send_message(chat_id=self.__message.chat.id, text = question)
-        bot.send_message(chat_id=self.__message.chat.id, text = helping[1]) 
+        bot.send_message(chat_id=self.__message.chat.id, text = str(helping[1])[5:-5])
 
     def __answer(self, number):
         connection = self.__create_connection(self.__question_table)
